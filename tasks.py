@@ -16,7 +16,7 @@ import numpy as np
 # -----------------------------------------------
 
 def compute_output_size_1d(input_array, kernel_array):
-    pass
+    return len(input_array) - len(kernel_array) + 1
 
 
 # -----------------------------------------------
@@ -35,9 +35,14 @@ print(compute_output_size_1d(input_array, kernel_array))
 # -----------------------------------------------
 
 def convolve_1d(input_array, kernel_array):
-    # Tip: start by initializing an empty output array (you can use your function above to calculate the correct size).
-    # Then fill the cells in the array with a loop.
-    pass
+    output_size = compute_output_size_1d(input_array, kernel_array)
+    output = np.zeros(output_size)
+
+    for i in range(output_size):
+        segment = input_array[i : i + len(kernel_array)]
+        output[i] = np.sum(segment * kernel_array)
+
+    return output
 
 # -----------------------------------------------
 # Another tip: write test cases like this, so you can easily test your function.
@@ -56,8 +61,9 @@ print(convolve_1d(input_array, kernel_array))
 # -----------------------------------------------
 
 def compute_output_size_2d(input_matrix, kernel_matrix):
-    pass
-
+    out_height = input_matrix.shape[0] - kernel_matrix.shape[0] + 1
+    out_width = input_matrix.shape[1] - kernel_matrix.shape[1] + 1
+    return (out_height, out_width)
 
 # -----------------------------------------------
 
@@ -70,9 +76,18 @@ def compute_output_size_2d(input_matrix, kernel_matrix):
 # Your code here:
 # -----------------------------------------------
 def convolute_2d(input_matrix, kernel_matrix):
-    # Tip: same tips as above, but you might need a nested loop here in order to
-    # define which parts of the input matrix need to be multiplied with the kernel matrix.
-    pass
+    out_h, out_w = compute_output_size_2d(input_matrix, kernel_matrix)
+    output = np.zeros((out_h, out_w))
+
+    kh, kw = kernel_matrix.shape
+
+    for i in range(out_h):
+        for j in range(out_w):
+            region = input_matrix[i : i + kh, j : j + kw]
+            output[i, j] = np.sum(region * kernel_matrix)
+
+    return output
+
 
 
 # -----------------------------------------------
